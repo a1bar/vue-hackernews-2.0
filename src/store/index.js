@@ -7,6 +7,7 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
   state: {
     activeType: null,
+    activePage: {/* [id: number]: Number */},
     itemsPerPage: 20,
     items: {/* [id: number]: Item */},
     users: {/* [id: string]: User */},
@@ -21,8 +22,9 @@ const store = new Vuex.Store({
 
   actions: {
     // ensure data for rendering given list type
-    FETCH_LIST_DATA: ({ commit, dispatch, state }, { type }) => {
+    FETCH_LIST_DATA: ({ commit, dispatch, state }, { type, page }) => {
       commit('SET_ACTIVE_TYPE', { type })
+      if (page) commit('SET_ACTIVE_PAGE', { page })
       return fetchIdsByType(type)
         .then(ids => commit('SET_LIST', { type, ids }))
         .then(() => dispatch('ENSURE_ACTIVE_ITEMS'))
@@ -67,6 +69,9 @@ const store = new Vuex.Store({
     SET_ACTIVE_TYPE: (state, { type }) => {
       state.activeType = type
     },
+    SET_ACTIVE_PAGE: (state, { page }) => {
+      Vue.set(state.activePage, state.activeType, page)
+    },
 
     SET_LIST: (state, { type, ids }) => {
       state.lists[type] = ids
@@ -89,12 +94,13 @@ const store = new Vuex.Store({
     // ids of the items that should be currently displayed based on
     // current list type and current pagination
     activeIds (state) {
-      const { activeType, itemsPerPage, lists } = state
-      const page = Number(state.route.params.page) || 1
+      const { activeType, itemsPerPage, lists, activePage } = state
+      const page = activePage[activeType] || Number(state.route.params.page) || 1
+      // debugger;
       if (activeType) {
         const start = (page - 1) * itemsPerPage
         const end = page * itemsPerPage
-        return lists[activeType].slice(start, end)
+        return lists[activeType].slice(0, end)
       } else {
         return []
       }

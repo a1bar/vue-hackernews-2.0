@@ -8,8 +8,6 @@
         <router-link to="/top">Top</router-link>
         <router-link to="/new">New</router-link>
         <router-link to="/show">Show</router-link>
-        <router-link to="/ask">Ask</router-link>
-        <router-link to="/job">Jobs</router-link>
         <a class="github" href="https://github.com/vuejs/vue-hackernews-2.0" target="_blank">
           Built with Vue.js
         </a>
@@ -44,10 +42,9 @@ a
   left 0
   right 0
   .inner
-    max-width 800px
     box-sizing border-box
     margin 0px auto
-    padding 15px 5px
+    padding 15px
   a
     color rgba(255, 255, 255, .8)
     line-height 24px
@@ -77,7 +74,6 @@ a
   vertical-align middle
 
 .view
-  max-width 800px
   margin 0 auto
   position relative
 
