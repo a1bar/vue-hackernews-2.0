@@ -8,6 +8,7 @@ const store = new Vuex.Store({
   state: {
     activeType: null,
     activePage: {/* [id: number]: Number */},
+    scrollPosition: {/* [id: string]: Number */},
     itemsPerPage: 20,
     items: {/* [id: number]: Item */},
     users: {/* [id: string]: User */},
@@ -87,6 +88,10 @@ const store = new Vuex.Store({
 
     SET_USER: (state, { user }) => {
       Vue.set(state.users, user.id, user)
+    },
+
+    SET_SCROLL: (state, { type, scrollPosition }) => {
+      Vue.set(state.scrollPosition, type, scrollPosition)
     }
   },
 
@@ -110,6 +115,9 @@ const store = new Vuex.Store({
     // this Array may not be fully fetched.
     activeItems (state, getters) {
       return getters.activeIds.map(id => state.items[id]).filter(_ => _)
+    },
+    scrollPosition (state) {
+      return state.route.name ? state.scrollPosition[state.route.name] : null;
     }
   }
 })
